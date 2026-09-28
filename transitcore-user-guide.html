@@ -1,0 +1,1079 @@
+<title>TransitCore User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+  :root {
+    --bg: oklch(0.962 0.004 131);
+    --surface: oklch(1 0 0);
+    --surface-2: oklch(0.975 0.006 131);
+    --ink: oklch(0.17 0.01 131);
+    --ink-2: oklch(0.47 0.019 266);
+    --line: oklch(0.885 0.006 131);
+    --accent: oklch(0.54 0.16 131.2);
+    --accent-ink: oklch(0.47 0.14 131.2);
+    --on-accent: oklch(1 0 0);
+    --accent-soft: oklch(0.965 0.035 131.3);
+    --note-soft: oklch(0.968 0.014 231.7);
+    --note-ink: oklch(0.47 0.14 253.1);
+    --warn-soft: oklch(0.968 0.05 95.2);
+    --warn-ink: oklch(0.47 0.1 91.1);
+    --shadow: 0 1px 2px oklch(0.2 0.02 131 / 0.06), 0 8px 24px oklch(0.2 0.02 131 / 0.08);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: oklch(0.16 0.01 250);
+      --surface: oklch(0.2 0.01 250);
+      --surface-2: oklch(0.235 0.012 250);
+      --ink: oklch(0.95 0.006 250);
+      --ink-2: oklch(0.76 0.01 250);
+      --line: oklch(0.33 0.015 250);
+      --accent: oklch(0.789 0.171 131.2);
+      --accent-ink: oklch(0.82 0.16 131.2);
+      --on-accent: oklch(0.16 0.01 131);
+      --accent-soft: oklch(0.27 0.06 138.5);
+      --note-soft: oklch(0.26 0.045 253.1);
+      --note-ink: oklch(0.84 0.08 253.1);
+      --warn-soft: oklch(0.28 0.05 91.1);
+      --warn-ink: oklch(0.87 0.13 91.1);
+      --shadow: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 24px oklch(0 0 0 / 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: oklch(0.16 0.01 250);
+    --surface: oklch(0.2 0.01 250);
+    --surface-2: oklch(0.235 0.012 250);
+    --ink: oklch(0.95 0.006 250);
+    --ink-2: oklch(0.76 0.01 250);
+    --line: oklch(0.33 0.015 250);
+    --accent: oklch(0.789 0.171 131.2);
+    --accent-ink: oklch(0.82 0.16 131.2);
+    --on-accent: oklch(0.16 0.01 131);
+    --accent-soft: oklch(0.27 0.06 138.5);
+    --note-soft: oklch(0.26 0.045 253.1);
+    --note-ink: oklch(0.84 0.08 253.1);
+    --warn-soft: oklch(0.28 0.05 91.1);
+    --warn-ink: oklch(0.87 0.13 91.1);
+    --shadow: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 24px oklch(0 0 0 / 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-ink); text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, img:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .mi {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.15em;
+    line-height: 1;
+    vertical-align: -0.2em;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding-inline: 20px;
+  }
+  .masthead__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-block: 40px 36px;
+    display: grid;
+    gap: 16px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .brand__mark {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .brand__mark .mi { font-size: 20px; vertical-align: 0; }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4.2vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 1.1rem;
+    color: var(--ink-2);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin: 8px 0 0;
+  }
+  .meta div { display: grid; gap: 2px; }
+  .meta dt {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+  }
+  .meta dd { margin: 0; font-weight: 500; }
+
+  /* ---------- layout ---------- */
+  .layout {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 32px 80px;
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: 232px minmax(0, 1fr); gap: 56px; }
+  }
+  main { min-width: 0; max-width: 860px; }
+
+  /* ---------- contents ---------- */
+  .toc details {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  .toc summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    list-style-position: inside;
+  }
+  .toc ol { list-style: none; margin: 10px 0 4px; padding: 0; display: grid; gap: 2px; }
+  .toc a {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .toc a:hover { color: var(--ink); background: var(--surface-2); }
+  .toc a[aria-current="true"] { color: var(--accent-ink); background: var(--accent-soft); font-weight: 600; }
+  .toc .toc__sub a { padding-left: 22px; font-size: 13px; }
+  @media (min-width: 1024px) {
+    .toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; margin-left: -10px; }
+    .toc details { background: transparent; border: 0; padding: 0; }
+    .toc summary { list-style: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); padding: 0 10px; pointer-events: none; }
+    .toc summary::-webkit-details-marker { display: none; }
+  }
+
+  /* ---------- content ---------- */
+  section { scroll-margin-top: 24px; }
+  section + section { margin-top: 72px; }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(1.55rem, 3vw, 1.9rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+  .section-intro { margin: 12px 0 0; color: var(--ink-2); max-width: 65ch; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+  }
+  .badge .mi { font-size: 15px; vertical-align: 0; }
+  .task { scroll-margin-top: 24px; margin-top: 44px; }
+  h3 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+  h3.subhead { margin-top: 32px; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  p { margin: 12px 0 0; max-width: 68ch; }
+  .where { margin: 4px 0 0; font-size: 14px; color: var(--ink-2); }
+
+  .path {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 8px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 0.92em;
+    white-space: nowrap;
+  }
+  .path i { font-style: normal; color: var(--ink-2); }
+  .btn {
+    display: inline-block;
+    padding: 0 0.6em;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    font-size: 0.9em;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+  .link { color: var(--accent-ink); font-weight: 600; white-space: nowrap; }
+  .tab {
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 1px;
+  }
+  .f { font-weight: 600; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    overflow-wrap: anywhere;
+  }
+
+  ol.steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    max-width: 70ch;
+  }
+  ol.steps > li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 40px;
+  }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-weight: 700;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  ul.plain { margin: 14px 0 0; padding-left: 20px; display: grid; gap: 8px; max-width: 70ch; }
+
+  figure.shot { margin: 22px 0 0; }
+  figure.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    cursor: zoom-in;
+    background: var(--surface);
+  }
+  figure.shot figcaption {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-2);
+    max-width: 70ch;
+  }
+
+  .callout {
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    max-width: 70ch;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 10px;
+    align-items: start;
+  }
+  .callout .mi { font-size: 20px; vertical-align: 0; margin-top: 2px; }
+  .callout p { margin: 0; }
+  .callout strong { display: block; }
+  .callout.tip { background: var(--accent-soft); }
+  .callout.tip .mi { color: var(--accent-ink); }
+  .callout.note { background: var(--note-soft); }
+  .callout.note .mi { color: var(--note-ink); }
+  .callout.caution { background: var(--warn-soft); }
+  .callout.caution .mi { color: var(--warn-ink); }
+
+  .legend {
+    margin-top: 20px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: grid;
+    gap: 10px;
+  }
+  .legend h3 { font-size: 15px; margin: 0; }
+  .legend ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .legend li { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; font-size: 15px; }
+
+  .table-wrap { margin-top: 18px; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-2); font-weight: 600; background: var(--surface-2); }
+  td .mi { color: var(--ink-2); }
+  td:first-child { white-space: nowrap; }
+  .t-msg td:first-child { white-space: normal; min-width: 14rem; font-weight: 500; }
+
+  ol.order { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: ord; display: grid; gap: 8px; max-width: 70ch; }
+  ol.order li { counter-increment: ord; display: grid; grid-template-columns: 2rem 1fr; gap: 10px; align-items: baseline; }
+  ol.order li::before { content: counter(ord) "."; font-weight: 700; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+
+  footer.guide-foot {
+    margin-top: 72px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  /* ---------- zoom ---------- */
+  dialog.zoom {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    max-width: min(96vw, 1600px);
+    max-height: 94vh;
+  }
+  dialog.zoom::backdrop { background: oklch(0.1 0.01 250 / 0.82); }
+  dialog.zoom img { display: block; max-width: 100%; max-height: 90vh; width: auto; height: auto; border-radius: 10px; }
+  dialog.zoom .zoom__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 0;
+    background: oklch(1 0 0 / 0.92);
+    color: oklch(0.2 0 0);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <div class="brand"><span class="brand__mark"><span class="mi" aria-hidden="true">local_shipping</span></span> TransitCore</div>
+    <h1>TransitCore User Guide</h1>
+    <p class="lede">How to use TransitCore every day: sign in, look after your fleet, run trips, book shipments, bill customers and manage users. Each task is a short list of steps with a picture of the real screen.</p>
+    <dl class="meta">
+      <div><dt>Written for</dt><dd>Dispatch, operations, accounts and admin staff</dd></div>
+      <div><dt>Screens shown as</dt><dd>Admin (sees every menu)</dd></div>
+      <div><dt>Updated</dt><dd>25 Sep 2026</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Contents">
+    <details open id="toc-box">
+      <summary>Contents</summary>
+      <ol>
+        <li><a href="#start">Getting started</a></li>
+        <li class="toc__sub"><a href="#sign-in">Sign in</a></li>
+        <li class="toc__sub"><a href="#layout">Find your way around</a></li>
+        <li class="toc__sub"><a href="#lists">Work with lists</a></li>
+        <li class="toc__sub"><a href="#roles">Who can see what</a></li>
+        <li class="toc__sub"><a href="#setup">First-time setup order</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#fleet">Fleet</a></li>
+        <li class="toc__sub"><a href="#add-vehicle">Add a vehicle</a></li>
+        <li class="toc__sub"><a href="#vehicle-records">Vehicle records</a></li>
+        <li class="toc__sub"><a href="#add-driver">Add a driver</a></li>
+        <li class="toc__sub"><a href="#driver-details">Driver details</a></li>
+        <li><a href="#operations">Operations</a></li>
+        <li class="toc__sub"><a href="#routes">Routes and stops</a></li>
+        <li class="toc__sub"><a href="#schedule-trip">Schedule a trip</a></li>
+        <li class="toc__sub"><a href="#run-trip">Run a trip</a></li>
+        <li class="toc__sub"><a href="#book-shipment">Book a shipment</a></li>
+        <li class="toc__sub"><a href="#tracking">Customer tracking</a></li>
+        <li class="toc__sub"><a href="#bulk-upload">Bulk upload</a></li>
+        <li><a href="#billing">Billing</a></li>
+        <li class="toc__sub"><a href="#customers">Add a customer</a></li>
+        <li class="toc__sub"><a href="#rate-cards">Rate cards</a></li>
+        <li class="toc__sub"><a href="#generate-invoice">Invoice from shipments</a></li>
+        <li class="toc__sub"><a href="#add-invoice">Invoice by hand</a></li>
+        <li class="toc__sub"><a href="#invoices">Invoices and PDFs</a></li>
+        <li class="toc__sub"><a href="#payments">Record a payment</a></li>
+        <li class="toc__sub"><a href="#aging">Aging report</a></li>
+        <li><a href="#reports">Reports</a></li>
+        <li><a href="#admin">Administration</a></li>
+        <li class="toc__sub"><a href="#users">Add a user</a></li>
+        <li class="toc__sub"><a href="#master-data">Master data</a></li>
+        <li><a href="#help">Messages and tips</a></li>
+      </ol>
+    </details>
+  </nav>
+
+  <main>
+    <section id="start">
+      <div class="section-head"><h2>Getting started</h2></div>
+      <p class="section-intro">Start here if you are new to TransitCore. This part covers signing in, the menus, and the features that work the same on every page.</p>
+
+      <div class="legend" role="note">
+        <h3>How to read this guide</h3>
+        <ul>
+          <li><span class="btn">Save Vehicle</span> A green button you click.</li>
+          <li><span class="path">Fleet <i>›</i> Vehicles</span> The menu to open, then the page to click.</li>
+          <li><span class="tab">Payments</span> A tab at the top of a details page.</li>
+          <li><span class="f">Registration No</span> A field on the screen. Fields marked <span class="f">*</span> on screen must be filled in.</li>
+          <li><span class="mi" aria-hidden="true">zoom_in</span> Click any screenshot to see it larger.</li>
+        </ul>
+      </div>
+
+      <article class="task" id="sign-in">
+        <h3>Sign in</h3>
+        <ol class="steps">
+          <li>Open TransitCore in your web browser. Your administrator gives you the address. In the test setup it is <code>http://localhost:4200</code>.</li>
+          <li>Type your <span class="f">Email</span> and <span class="f">Password</span>. Click the eye icon if you want to check the password you typed.</li>
+          <li>Click <span class="btn">Sign in</span>. The Dashboard opens.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/01-login.jpg" width="2560" height="1600" loading="lazy" alt="TransitCore sign-in page with Email and Password fields and a green Sign in button">
+          <figcaption>The sign-in page.</figcaption>
+        </figure>
+        <aside class="callout note"><span class="mi" aria-hidden="true">info</span><p><strong>No account, or forgot your password?</strong> Ask your administrator. They create accounts and can reset passwords.</p></aside>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Demo accounts for the test environment</caption>
+            <thead><tr><th>Demo account (test setup only)</th><th>Password</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr><td><code>admin@transitcore.local</code></td><td><code>Admin@123</code></td><td>Admin</td></tr>
+              <tr><td><code>manager@transitcore.local</code></td><td><code>Manager@123</code></td><td>Manager</td></tr>
+              <tr><td><code>ops@transitcore.local</code></td><td><code>User@123</code></td><td>User</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="task" id="layout">
+        <h3>Find your way around</h3>
+        <p>The dark icons down the left side are the main menu. Click an icon to open its menu, then click the page you want. Click outside the menu to close it.</p>
+        <figure class="shot">
+          <img src="img/03-navigation.jpg" width="2560" height="1600" loading="lazy" alt="The Fleet menu opened from the left icon bar, showing Vehicles and Drivers">
+          <figcaption>Clicking the truck icon opens the Fleet menu with Vehicles and Drivers.</figcaption>
+        </figure>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Icon</th><th>Menu</th><th>Pages inside</th></tr></thead>
+            <tbody>
+              <tr><td><span class="mi" aria-hidden="true">dashboard</span></td><td>Overview</td><td>Dashboard</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">local_shipping</span></td><td>Fleet</td><td>Vehicles, Drivers</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">route</span></td><td>Operations</td><td>Trips, Routes, Shipments, Vehicle Orders, Bulk Upload</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">receipt_long</span></td><td>Billing</td><td>Invoices, Customers, Rate Cards, Aging Report</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">insights</span></td><td>Insights</td><td>Reports (Admin and Manager)</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">admin_panel_settings</span></td><td>Admin</td><td>Users, Master Data (Admin only)</td></tr>
+              <tr><td><span class="mi" aria-hidden="true">logout</span></td><td>Log out</td><td>At the bottom of the icon bar</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The bar across the top shows the name of the page you are on. It also has:</p>
+        <ul class="plain">
+          <li><span class="f">Search</span> <span class="mi" aria-hidden="true">search</span> on the left: find anything in TransitCore (see below).</li>
+          <li>The moon icon <span class="mi" aria-hidden="true">dark_mode</span>: switch between light and dark mode. TransitCore remembers your choice.</li>
+          <li>The bell <span class="mi" aria-hidden="true">notifications</span>: your notifications.</li>
+          <li>Your name on the right: click it to see your email and <span class="f">Log out</span>.</li>
+        </ul>
+
+        <h3 class="subhead">Search everything</h3>
+        <ol class="steps">
+          <li>Click <span class="f">Search</span> in the top bar.</li>
+          <li>Type at least 2 letters, for example <code>Mum</code>. You can search names, registration numbers, tracking numbers, invoice numbers and customer codes.</li>
+          <li>Results appear grouped by type: routes, trips, vehicles, drivers, shipments, invoices, customers and users. Click a result to open it.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/04-search.jpg" width="2560" height="1600" loading="lazy" alt="Search results for 'Mum' grouped into Route and Trip results">
+          <figcaption>Typing "Mum" finds the Mumbai routes and the trips on them.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="lists">
+        <h3>Work with lists</h3>
+        <p>Vehicles, Drivers, Trips, Routes, Shipments, Customers, Invoices and Users are all lists that work the same way:</p>
+        <ul class="plain">
+          <li><span class="f">Search this page…</span> filters the rows in the list.</li>
+          <li>The column button <span class="mi" aria-hidden="true">view_column</span> shows or hides columns.</li>
+          <li>The download button <span class="mi" aria-hidden="true">download</span> saves the list as a CSV file you can open in Excel.</li>
+          <li>Click a row to open its details. Click the pencil <span class="mi" aria-hidden="true">edit</span> to edit it.</li>
+          <li><span class="f">Items per page</span> and the arrows at the bottom move between pages.</li>
+          <li>The green button at the top right adds a new record, for example <span class="btn">Add Vehicle</span>.</li>
+        </ul>
+        <figure class="shot">
+          <img src="img/05-vehicles.jpg" width="2560" height="1600" loading="lazy" alt="Vehicles list with Add Vehicle button, search box, column and download buttons, and an edit pencil on each row">
+          <figcaption>The Vehicles list. Every list has the same search, column, download and page controls.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="roles">
+        <h3>Who can see what</h3>
+        <p>What you see depends on the role your administrator gives you.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Can use</th></tr></thead>
+            <tbody>
+              <tr><td>User</td><td>Dashboard, Fleet, Operations and Billing</td></tr>
+              <tr><td>Manager</td><td>Everything a User can use, plus Reports</td></tr>
+              <tr><td>Admin</td><td>Everything, plus Admin (Users and Master Data)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="callout note"><span class="mi" aria-hidden="true">info</span><p><strong>Need more access?</strong> Ask your administrator. A change to your role takes effect the next time you sign in.</p></aside>
+      </article>
+
+      <article class="task" id="setup">
+        <h3>First-time setup order</h3>
+        <p>If you are setting TransitCore up for the first time, add things in this order. Each step uses data from the steps before it. For example, a trip needs a route, a vehicle and a driver.</p>
+        <ol class="order">
+          <li><span>Master data: regions, branches, cities, designations and units. <a href="#master-data">How</a></span></li>
+          <li><span>Users, each with a role and a branch. <a href="#users">How</a></span></li>
+          <li><span>Vehicles and drivers. <a href="#add-vehicle">How</a></span></li>
+          <li><span>Routes and their stops. <a href="#routes">How</a></span></li>
+          <li><span>Customers and rate cards. <a href="#customers">How</a></span></li>
+          <li><span>Shipments and trips. <a href="#book-shipment">How</a></span></li>
+          <li><span>Invoices and payments. <a href="#generate-invoice">How</a></span></li>
+        </ol>
+      </article>
+    </section>
+
+    <section id="dashboard">
+      <div class="section-head"><h2>Dashboard</h2><span class="badge"><span class="mi" aria-hidden="true">group</span>All roles</span></div>
+      <p class="where">Open it from <span class="path">Overview <i>›</i> Dashboard</span>. It also opens when you sign in.</p>
+      <p>The Dashboard gives you a quick picture of the business. The cards across the top show Active Trips, Shipments, Invoices, the Outstanding amount, Total Revenue and Total Expenses. The charts below show revenue, shipment volume, fleet use and invoices by status.</p>
+      <figure class="shot">
+        <img src="img/02-dashboard.jpg" width="2560" height="1600" loading="lazy" alt="Dashboard with summary cards for trips, shipments, invoices, outstanding amount, revenue and expenses, and revenue and shipment volume charts">
+        <figcaption>The Dashboard. Amounts are in rupees with Indian digit grouping, for example ₹1,61,070.</figcaption>
+      </figure>
+    </section>
+
+    <section id="fleet">
+      <div class="section-head"><h2>Fleet</h2><span class="badge"><span class="mi" aria-hidden="true">group</span>All roles</span></div>
+      <p class="section-intro">Keep a record of every vehicle and driver: their details, papers, servicing, fuel and performance.</p>
+
+      <article class="task" id="add-vehicle">
+        <h3>Add a vehicle</h3>
+        <p class="where">Open <span class="path">Fleet <i>›</i> Vehicles</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add Vehicle</span>.</li>
+          <li>Fill in <span class="f">Registration No</span>, <span class="f">Vehicle Type</span>, <span class="f">Capacity (kg)</span> and <span class="f">Status</span>. <span class="f">Make</span>, <span class="f">Model</span> and <span class="f">Manufacture Year</span> are optional.</li>
+          <li>Click <span class="btn">Save Vehicle</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/06-vehicle-form.jpg" width="2560" height="1600" loading="lazy" alt="Add Vehicle form partly filled in with registration MH12AB4321, make Tata and model Signa 4825.TK">
+          <figcaption>The Add Vehicle form.</figcaption>
+        </figure>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">warning</span><p><strong>Check the registration number before you save.</strong> It can't be changed later.</p></aside>
+      </article>
+
+      <article class="task" id="vehicle-records">
+        <h3>Keep vehicle records: documents, maintenance and fuel</h3>
+        <ol class="steps">
+          <li>In <span class="path">Fleet <i>›</i> Vehicles</span>, click the vehicle's row. Its details page opens.</li>
+          <li>Choose a tab:
+            <span class="tab">Documents</span> for papers such as insurance and permits (type, number, issue and expiry dates),
+            <span class="tab">Maintenance</span> for servicing (date, description, cost, odometer, who did it) or
+            <span class="tab">Fuel Logs</span> for fuel (date, litres, cost, odometer).</li>
+          <li>Fill in the form under the list and click the add button: <span class="btn">Add Document</span>, <span class="btn">Add Record</span> or <span class="btn">Add Fuel Log</span>.</li>
+          <li>To delete an entry, click its bin icon <span class="mi" aria-hidden="true">delete</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/07-vehicle-detail.jpg" width="2560" height="1600" loading="lazy" alt="Vehicle TC-DL-01-1001 details on the Maintenance tab, with a brake pad replacement record and the Add Record form">
+          <figcaption>A vehicle's Maintenance tab. Use <span class="link">Edit vehicle</span> at the top to change the vehicle's details.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="add-driver">
+        <h3>Add a driver</h3>
+        <p class="where">Open <span class="path">Fleet <i>›</i> Drivers</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add Driver</span>.</li>
+          <li>Fill in <span class="f">Full Name</span> and <span class="f">Status</span>, plus <span class="f">Phone No</span>, <span class="f">Email</span>, <span class="f">Date of Birth</span> and <span class="f">Hire Date</span>.</li>
+          <li>Click <span class="btn">Save Driver</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/08-drivers.jpg" width="2560" height="1600" loading="lazy" alt="Drivers list showing name, phone, email, hire date and status, with an Add Driver button">
+          <figcaption>The Drivers list.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="driver-details">
+        <h3>Driver details: licences, performance and settlement</h3>
+        <p>Click a driver's row to open their details. The tabs are:</p>
+        <ul class="plain">
+          <li><span class="tab">Licenses</span>: add each driving licence with its number, type, issue date and expiry date, then click <span class="btn">Add License</span>.</li>
+          <li><span class="tab">Performance</span>: total trips, completed trips, on-time delivery, delayed trips and total distance driven.</li>
+          <li><span class="tab">Settlement</span>: the advances given to the driver and the expenses recorded across all of their trips, and the balance between them.</li>
+        </ul>
+        <figure class="shot">
+          <img src="img/09-driver-detail.jpg" width="2560" height="1600" loading="lazy" alt="Driver Deepak Verma's Performance tab showing total trips 3, completed trips 2 and total distance 2,480 km">
+          <figcaption>A driver's Performance tab.</figcaption>
+        </figure>
+      </article>
+    </section>
+
+    <section id="operations">
+      <div class="section-head"><h2>Operations</h2><span class="badge"><span class="mi" aria-hidden="true">group</span>All roles</span></div>
+      <p class="section-intro">Plan routes, schedule trips, record what happens on the road, and book the shipments you carry.</p>
+
+      <article class="task" id="routes">
+        <h3>Create a route and its stops</h3>
+        <p class="where">Open <span class="path">Operations <i>›</i> Routes</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add Route</span>.</li>
+          <li>Enter the <span class="f">Route Name</span>, <span class="f">Origin City</span>, <span class="f">Destination City</span> and <span class="f">Distance (km)</span>.</li>
+          <li>Click <span class="btn">Save Route</span>.</li>
+          <li>To add stops along the way, click the route's pencil. Under <span class="f">Stops</span>, choose a <span class="f">City</span>, add a <span class="f">Planned Arrival</span> if you know it, and click <span class="btn">Add Stop</span>. Stops are numbered in the order you add them.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/10-routes.jpg" width="2560" height="1600" loading="lazy" alt="Routes list with route name, origin, destination and distance in km">
+          <figcaption>The Routes list.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="img/11-route-form.jpg" width="2560" height="1600" loading="lazy" alt="Edit Route page for Bengaluru - Chennai with a Stops section listing one stop and an Add Stop form">
+          <figcaption>Editing a route. The Stops section is under the route details.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="schedule-trip">
+        <h3>Schedule a trip</h3>
+        <p class="where">Open <span class="path">Operations <i>›</i> Trips</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Schedule Trip</span>.</li>
+          <li>Choose the <span class="f">Route</span>, <span class="f">Vehicle</span>, <span class="f">Driver</span> and <span class="f">Status</span>.</li>
+          <li>Set the <span class="f">Scheduled Departure</span> and <span class="f">Scheduled Arrival</span> date and time.</li>
+          <li>Click <span class="btn">Schedule Trip</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/13-trip-form.jpg" width="2560" height="1600" loading="lazy" alt="Schedule Trip form with Route, Vehicle, Driver, Status, Scheduled Departure and Scheduled Arrival fields">
+          <figcaption>The Schedule Trip form.</figcaption>
+        </figure>
+        <aside class="callout note"><span class="mi" aria-hidden="true">info</span><p><strong>Double-booking check.</strong> If the vehicle or driver is already on another trip at that time, TransitCore shows <em>Scheduling conflict detected</em>. Click <span class="f">Go back and fix it</span> to change the trip, or <span class="f">Save anyway</span> if you are sure.</p></aside>
+        <figure class="shot">
+          <img src="img/12-trips.jpg" width="2560" height="1600" loading="lazy" alt="Trips list with route, vehicle, driver, departure, arrival and status, a Status filter and a Schedule Trip button">
+          <figcaption>The Trips list. Use the <span class="f">Status</span> filter at the top to show only trips with one status.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="run-trip">
+        <h3>Run a trip: status, costs and delivery</h3>
+        <p>Click a trip in <span class="path">Operations <i>›</i> Trips</span> to open it. Everything that happens on the trip is recorded here.</p>
+
+        <p><span class="f">Update the status.</span> On the <span class="tab">Overview</span> tab, choose the new status under <span class="f">Update status</span> and click <span class="btn">Apply</span>. Every change is listed on the <span class="tab">Status History</span> tab. Overview also shows the load on the vehicle against its capacity.</p>
+        <figure class="shot">
+          <img src="img/14-trip-detail.jpg" width="2560" height="1600" loading="lazy" alt="Trip Kolkata - Lucknow Overview tab showing vehicle, driver, scheduled times, current status In Transit and an Update status control">
+          <figcaption>A trip's Overview tab with the status control at the bottom.</figcaption>
+        </figure>
+
+        <p><span class="f">Record costs.</span> On the <span class="tab">Costs</span> tab, enter each expense (<span class="f">Expense Type</span>, <span class="f">Amount</span>, <span class="f">Date</span>, notes) and click <span class="btn">Add Expense</span>. Record cash given to the driver the same way under <span class="f">Advances</span> with <span class="btn">Add Advance</span>. The totals and balance at the top update.</p>
+        <figure class="shot">
+          <img src="img/15-trip-costs.jpg" width="2560" height="1600" loading="lazy" alt="Trip Costs tab showing total expenses, total advances, balance, and a form to add an expense">
+          <figcaption>The Costs tab. Advances are further down the same tab.</figcaption>
+        </figure>
+
+        <p><span class="f">Record the delivery.</span> On the <span class="tab">Proof of Delivery</span> tab:</p>
+        <ol class="steps">
+          <li>Enter the <span class="f">Receiver Name</span>, <span class="f">Receiver Phone</span> and <span class="f">Delivered At</span> time, and any notes.</li>
+          <li>Ask the receiver to sign in the <span class="f">Receiver Signature</span> box using a mouse or a finger. Click <span class="f">Clear</span> to start the signature again.</li>
+          <li>Add delivery photos if you have them.</li>
+          <li>Click <span class="btn">Record Delivery</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/16-trip-pod.jpg" width="2560" height="1600" loading="lazy" alt="Proof of Delivery tab with receiver name, phone, delivered-at time, notes and a signature box">
+          <figcaption>The Proof of Delivery tab.</figcaption>
+        </figure>
+
+        <p><span class="f">Papers and problems.</span> Use the <span class="tab">Documents</span> tab to upload trip papers: choose the document type, pick the file and click <span class="btn">Upload</span>. Use the <span class="tab">Incidents</span> tab to record a breakdown, delay or damage: choose the incident type, describe it and click <span class="btn">Report Incident</span>.</p>
+      </article>
+
+      <article class="task" id="book-shipment">
+        <h3>Book a shipment</h3>
+        <p class="where">Open <span class="path">Operations <i>›</i> Shipments</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add Shipment</span>.</li>
+          <li>Choose the <span class="f">Customer</span>, <span class="f">Shipment Date</span>, <span class="f">Origin City</span>, <span class="f">Destination City</span> and <span class="f">Status</span>.</li>
+          <li>Choose the <span class="f">Freight Payment</span> type:
+            <span class="f">To Be Billed</span> if you will invoice the customer later (this is the default),
+            <span class="f">Paid</span> if the freight is already paid, or
+            <span class="f">To Pay</span> if the money is collected at delivery.</li>
+          <li>Under <span class="f">Items</span>, enter each item's <span class="f">Description</span>, <span class="f">Qty</span>, <span class="f">Unit</span> and <span class="f">Weight (kg)</span>. Click <span class="f">Add Item</span> for another line.</li>
+          <li>Click <span class="btn">Save Shipment</span>. The shipment gets a tracking number, such as <code>TRK000014</code>, and a consignment note number.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/18-shipment-form.jpg" width="2560" height="1600" loading="lazy" alt="Add Shipment form filled in for Aarav Retail Pvt Ltd from Mumbai to Pune, freight payment To Be Billed, with one item of 20 cartons of steel pipes weighing 500 kg">
+          <figcaption>A new shipment ready to save.</figcaption>
+        </figure>
+        <aside class="callout tip"><span class="mi" aria-hidden="true">lightbulb</span><p><strong>Weight matters.</strong> Invoice prices are worked out from the weight you enter here, so always fill in <span class="f">Weight (kg)</span>. Only <span class="f">To Be Billed</span> shipments can be invoiced from Generate Invoice.</p></aside>
+        <aside class="callout note"><span class="mi" aria-hidden="true">info</span><p><strong>Seeing "Your account has no primary branch configured"?</strong> Your user needs a branch before you can book shipments. Ask your administrator to add one (see <a href="#users">Add a user</a>).</p></aside>
+        <p>You can change a shipment later with its pencil in the list, but not its items.</p>
+        <figure class="shot">
+          <img src="img/17-shipments.jpg" width="2560" height="1600" loading="lazy" alt="Shipments list with tracking number, customer, origin, destination, date and status">
+          <figcaption>The Shipments list. Each shipment has a tracking number.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="tracking">
+        <h3>Let customers track a shipment</h3>
+        <p>Customers can check a shipment themselves. They don't need an account.</p>
+        <ol class="steps">
+          <li>Give the customer the shipment's tracking number, for example <code>TRK000001</code>, and the tracking page address. This is your TransitCore address followed by <code>/#/track</code>. In the test setup: <code>http://localhost:4200/#/track</code></li>
+          <li>The customer types the tracking number and clicks <span class="btn">Track</span>.</li>
+          <li>They see where the shipment is from and going to, the shipment date and its current status.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/19-track.jpg" width="2560" height="1600" loading="lazy" alt="Public Track your shipment page showing TRK000001 from Hyderabad to Nagpur with status Pending">
+          <figcaption>The public tracking page.</figcaption>
+        </figure>
+        <aside class="callout tip"><span class="mi" aria-hidden="true">lightbulb</span><p><strong>Send a direct link.</strong> Add the tracking number to the end of the address to open that shipment straight away, for example <code>…/#/track/TRK000001</code>.</p></aside>
+      </article>
+
+      <article class="task" id="bulk-upload">
+        <h3>Upload vehicle orders from Excel</h3>
+        <p class="where">Open <span class="path">Operations <i>›</i> Bulk Upload</span></p>
+        <ol class="steps">
+          <li>Click <span class="f">Download Template</span>.</li>
+          <li>In the file, put the <span class="f">Order No</span> in column A and the <span class="f">Vehicle No</span> in column B, one row per order.</li>
+          <li>Save the file in <code>.xlsx</code> format.</li>
+          <li>Drag the file onto the upload box, or click <span class="f">Browse File</span> and choose it.</li>
+          <li>Click <span class="btn">Upload</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/20-bulk-upload.jpg" width="2560" height="1600" loading="lazy" alt="Bulk Upload page with a drag and drop area, Download Template link and Upload button">
+          <figcaption>The Bulk Upload page.</figcaption>
+        </figure>
+        <p>To look up uploaded orders later, open <span class="path">Operations <i>›</i> Vehicle Orders</span>, pick a <span class="f">From Date</span> and <span class="f">To Date</span>, and click <span class="btn">Search</span>.</p>
+      </article>
+    </section>
+
+    <section id="billing">
+      <div class="section-head"><h2>Billing</h2><span class="badge"><span class="mi" aria-hidden="true">group</span>All roles</span></div>
+      <p class="section-intro">Set up customers and prices, raise invoices, record payments and follow up on unpaid bills.</p>
+
+      <article class="task" id="customers">
+        <h3>Add a customer</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Customers</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add Customer</span>.</li>
+          <li>Enter a <span class="f">Code</span> (for example <code>CUST016</code>) and the customer's <span class="f">Name</span>.</li>
+          <li>Enter a <span class="f">Credit Limit</span>, or leave it blank for no limit.</li>
+          <li>Click <span class="btn">Add Customer</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/21b-add-customer.jpg" width="2560" height="1600" loading="lazy" alt="Add Customer dialog with code CUST016, name Sahyadri Agro Foods and credit limit 500000">
+          <figcaption>The Add Customer window over the Customers list.</figcaption>
+        </figure>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">warning</span><p><strong>The code can't be changed later.</strong> Use the pencil to change the name, credit limit or whether the customer is active.</p></aside>
+      </article>
+
+      <article class="task" id="rate-cards">
+        <h3>Set up rate cards (your prices)</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Rate Cards</span></p>
+        <p>A rate card sets your price per kilogram and per kilometre. TransitCore uses it to price shipments when you generate invoices from them.</p>
+        <ol class="steps">
+          <li>Under <span class="f">Add Rate Card</span>, choose a <span class="f">Customer</span>, <span class="f">Origin City</span> and <span class="f">Destination City</span>. Leave any of them empty to mean "any".</li>
+          <li>Enter the <span class="f">Rate per Kg</span> and <span class="f">Rate per Km</span>.</li>
+          <li>Set <span class="f">Effective From</span>, and <span class="f">Effective To</span> if the price ends on a date.</li>
+          <li>Click <span class="btn">Add Rate Card</span>. It appears under <span class="f">Existing Rate Cards</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/23-rate-cards.jpg" width="2560" height="1600" loading="lazy" alt="Rate Cards page listing one rate card for any customer and any route at ₹2.50 per kg and ₹18.00 per km, effective 01 Apr 2026, above the Add Rate Card form">
+          <figcaption>A rate card for all customers and routes at ₹2.50/kg and ₹18.00/km.</figcaption>
+        </figure>
+        <aside class="callout note"><span class="mi" aria-hidden="true">calculate</span><p><strong>How the price is worked out.</strong> Price = weight in kg × rate per kg + route distance in km × rate per km. The distance counts only when the shipment is on a trip. If several rate cards fit, TransitCore uses the most specific one. For example, a card for this customer and route wins over an "any" card.</p></aside>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">warning</span><p><strong>Check the dates.</strong> A rate card only prices shipments dated on or after its <span class="f">Effective From</span> date. If a shipment shows "No rate card", check that a card covers its date.</p></aside>
+        <p>Rate cards can't be edited. To change a price, delete the card with its bin icon and add a new one.</p>
+      </article>
+
+      <article class="task" id="generate-invoice">
+        <h3>Generate an invoice from shipments</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Invoices</span> and click <span class="link">Generate from Shipments</span></p>
+        <ol class="steps">
+          <li>Choose the <span class="f">Customer</span> and a <span class="f">From Date</span> and <span class="f">To Date</span>, then click <span class="btn">Load Shipments</span>. You see that customer's shipments that have not been invoiced yet.</li>
+          <li>Tick the shipments to bill. The tick box at the top selects every shipment that has a price. Shipments marked "No rate card" can't be ticked until a rate card covers them.</li>
+          <li>Check the estimated total, then fill in the <span class="f">Invoice No</span>, <span class="f">Invoice Date</span>, <span class="f">Due Date</span>, <span class="f">Discount Amount</span>, <span class="f">Tax Amount</span> and <span class="f">Status</span>.</li>
+          <li>Click <span class="btn">Generate Invoice</span>. The new invoice opens.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/24-generate-invoice.jpg" width="2560" height="1600" loading="lazy" alt="Generate Invoice from Shipments page for Aarav Retail Pvt Ltd with three Mumbai to Delhi shipments ticked, estimated total ₹1,501.25, and the invoice details form">
+          <figcaption>Three shipments ticked, with an estimated total of ₹1,501.25.</figcaption>
+        </figure>
+        <aside class="callout note"><span class="mi" aria-hidden="true">info</span><p><strong>Changed the customer?</strong> The list clears so you can't bill the wrong customer. Click <span class="btn">Load Shipments</span> again.</p></aside>
+      </article>
+
+      <article class="task" id="add-invoice">
+        <h3>Create an invoice by hand</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Invoices</span> and click <span class="btn">Add Invoice</span></p>
+        <ol class="steps">
+          <li>Enter the <span class="f">Invoice No</span>, <span class="f">Customer</span>, <span class="f">Invoice Date</span>, <span class="f">Due Date</span> and <span class="f">Status</span>, plus any <span class="f">Discount Amount</span> and <span class="f">Tax Amount</span>.</li>
+          <li>Under <span class="f">Lines</span>, enter each line's <span class="f">Description</span>, <span class="f">Qty</span> and <span class="f">Unit Price</span>. Click <span class="f">Add Line</span> for another line.</li>
+          <li>Click <span class="btn">Save Invoice</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/25b-invoice-form.jpg" width="2560" height="1600" loading="lazy" alt="Add Invoice form for Bharat Traders with one line for freight charges from Mumbai to Pune at ₹18,500 and tax of ₹3,330">
+          <figcaption>A manual invoice with one line.</figcaption>
+        </figure>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">rule</span><p><strong>Invoice rules.</strong> Each invoice number must be new. The due date can't be before the invoice date. The discount can't be more than the subtotal plus tax.</p></aside>
+      </article>
+
+      <article class="task" id="invoices">
+        <h3>Find an invoice and download the PDF</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Invoices</span></p>
+        <p>The list shows each invoice's number, customer, dates, total and status. Click the PDF icon <span class="mi" aria-hidden="true">picture_as_pdf</span> on a row to download that invoice.</p>
+        <figure class="shot">
+          <img src="img/25-invoices.jpg" width="2560" height="1600" loading="lazy" alt="Invoices list with Aging Report, Generate from Shipments and Add Invoice buttons, and a PDF icon on each row">
+          <figcaption>The Invoices list.</figcaption>
+        </figure>
+        <p>Click an invoice to open it. The <span class="tab">Overview</span> tab shows the lines, subtotal, tax, total, amount paid and balance due. Click <span class="link">Download PDF</span> to save or print it.</p>
+        <figure class="shot">
+          <img src="img/26-invoice-detail.jpg" width="2560" height="1600" loading="lazy" alt="Invoice INV-2026-0003 overview showing the customer, status Partially Paid, one line, totals and balance due of ₹24,840">
+          <figcaption>An invoice's Overview tab.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="payments">
+        <h3>Record a payment</h3>
+        <ol class="steps">
+          <li>Open the invoice and click the <span class="tab">Payments</span> tab.</li>
+          <li>Check the <span class="f">Payment Date</span>. The <span class="f">Amount</span> is already filled in with the balance due. Change it for a part payment. It can't be more than the balance.</li>
+          <li>Choose the <span class="f">Method</span>: Cash, Bank Transfer, Cheque, UPI or Card. Add the <span class="f">Reference No</span>, such as a cheque or UTR number.</li>
+          <li>Click <span class="btn">Record Payment</span>. The invoice status updates by itself, for example to Partially Paid or Paid.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/27-invoice-payments.jpg" width="2560" height="1600" loading="lazy" alt="Invoice Payments tab showing total ₹44,840, paid ₹20,000, an earlier cheque payment, and the Record Payment form with amount 24840 filled in">
+          <figcaption>The Payments tab, with the balance of ₹24,840 filled in.</figcaption>
+        </figure>
+        <aside class="callout tip"><span class="mi" aria-hidden="true">lightbulb</span><p><strong>Recorded a payment by mistake?</strong> Click its bin icon and TransitCore works out the invoice status again. When an invoice is fully paid, the form is replaced by <em>This invoice is fully paid.</em></p></aside>
+      </article>
+
+      <article class="task" id="aging">
+        <h3>Check unpaid invoices (aging report)</h3>
+        <p class="where">Open <span class="path">Billing <i>›</i> Aging Report</span>, or click <span class="link">Aging Report</span> on the Invoices page</p>
+        <ol class="steps">
+          <li>Choose the <span class="f">As of Date</span> (today by default) and click <span class="btn">Refresh</span>.</li>
+          <li>The boxes show how much is unpaid: Current (not yet due), 1–30 days, 31–60 days, 61–90 days and 90+ days overdue, plus the total outstanding.</li>
+          <li>The table lists every unpaid invoice. Days overdue are shown in red. Click an invoice number to open it.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/28-aging-report.jpg" width="2560" height="1600" loading="lazy" alt="Invoice Aging Report with outstanding amounts grouped by days overdue and a table of unpaid invoices">
+          <figcaption>The aging report as of 25 Sep 2026.</figcaption>
+        </figure>
+      </article>
+    </section>
+
+    <section id="reports">
+      <div class="section-head"><h2>Reports</h2><span class="badge"><span class="mi" aria-hidden="true">lock</span>Admin and Manager</span></div>
+      <p class="where">Open <span class="path">Insights <i>›</i> Reports</span></p>
+      <ul class="plain">
+        <li><span class="f">Revenue by Period</span>: the amount invoiced and collected each month.</li>
+        <li><span class="f">Fleet Utilisation Trend</span>: how much of the fleet was in use each month.</li>
+        <li><span class="f">Shipment Volume Trend</span>: the number of shipments each month.</li>
+        <li><span class="f">Driver Settlement Summary</span>: advances, expenses and balance for every driver. Click a name to open that driver.</li>
+      </ul>
+      <figure class="shot">
+        <img src="img/29-reports.jpg" width="2560" height="1600" loading="lazy" alt="Reports page with Revenue by Period, Fleet Utilisation Trend, Shipment Volume Trend and Driver Settlement Summary">
+        <figcaption>The Reports page.</figcaption>
+      </figure>
+    </section>
+
+    <section id="admin">
+      <div class="section-head"><h2>Administration</h2><span class="badge"><span class="mi" aria-hidden="true">lock</span>Admin only</span></div>
+      <p class="section-intro">Create user accounts and keep the lists that other screens use up to date.</p>
+
+      <article class="task" id="users">
+        <h3>Add a user</h3>
+        <p class="where">Open <span class="path">Admin <i>›</i> Users</span></p>
+        <ol class="steps">
+          <li>Click <span class="btn">Add User</span>.</li>
+          <li>Enter the <span class="f">Email</span>, <span class="f">Password</span> and <span class="f">Display Name</span>. Fill in <span class="f">Phone No</span>, <span class="f">Employee Code</span>, <span class="f">Designation</span>, <span class="f">Working Designation</span>, <span class="f">Region</span>, <span class="f">Punch Location</span>, <span class="f">Shift</span> and <span class="f">Company</span> if you use them.</li>
+          <li>Choose the user's <span class="f">Branches</span> and <span class="f">Roles</span> (User, Manager or Admin).</li>
+          <li>Click <span class="btn">Save User</span>.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/31-user-form.jpg" width="2560" height="1600" loading="lazy" alt="Add User form with email, password, display name, phone, employee code, designation, working designation, region, punch location, shift, company, branches and roles">
+          <figcaption>The Add User form.</figcaption>
+        </figure>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">warning</span><p><strong>Give a branch to everyone who books shipments.</strong> Shipments are numbered by the user's primary branch. If a user has several branches, TransitCore keeps one of them as their primary branch.</p></aside>
+        <ul class="plain">
+          <li>To change a user, click their row. Untick <span class="f">Active</span> to stop them from signing in.</li>
+          <li>To reset a password, click the key icon <span class="mi" aria-hidden="true">vpn_key</span> on the user's row.</li>
+          <li>Role and access changes take effect the next time the user signs in.</li>
+        </ul>
+        <figure class="shot">
+          <img src="img/30-users.jpg" width="2560" height="1600" loading="lazy" alt="Users list with name, email, roles, branches and status, and a key icon on each row">
+          <figcaption>The Users list.</figcaption>
+        </figure>
+      </article>
+
+      <article class="task" id="master-data">
+        <h3>Keep master data up to date</h3>
+        <p class="where">Open <span class="path">Admin <i>›</i> Master Data</span></p>
+        <p>Master data holds the lists that other screens use: Regions, Branches, Designations, Working Designations, Countries, Cities, Units of Measure and Status Codes. Each has its own tab.</p>
+        <ol class="steps">
+          <li>Open the tab you need.</li>
+          <li>To add an entry, fill in the form at the bottom of the tab and click its add button, for example <span class="btn">Add Branch</span>. A branch needs a <span class="f">Name</span>, a <span class="f">Code</span> of up to 10 characters and a <span class="f">Region</span>.</li>
+          <li>To change an entry, click its pencil, make the change and click <span class="btn">Save Changes</span>. To remove it, click the bin.</li>
+        </ol>
+        <figure class="shot">
+          <img src="img/32-master-data.jpg" width="2560" height="1600" loading="lazy" alt="Master Data page on the Branches tab listing branches with their code and region">
+          <figcaption>The Branches tab. The branch code is shown in brackets.</figcaption>
+        </figure>
+        <aside class="callout caution"><span class="mi" aria-hidden="true">warning</span><p><strong>Leave system status codes alone.</strong> Don't rename or remove status codes that TransitCore relies on, such as Paid, Void, Sent, Completed, Booked, Cancelled and To Be Billed. Screens look them up by name.</p></aside>
+      </article>
+    </section>
+
+    <section id="help">
+      <div class="section-head"><h2>Messages and tips</h2></div>
+      <p class="section-intro">What common messages mean and what to do about them.</p>
+      <div class="table-wrap">
+        <table class="t-msg">
+          <thead><tr><th>Message</th><th>What it means and what to do</th></tr></thead>
+          <tbody>
+            <tr><td>… already exists<br><small>for example: Invoice No "INV-2026-0010" already exists.</small></td><td>Another record already uses that number or code. Use a different one.</td></tr>
+            <tr><td>Due date can't be before the invoice date.</td><td>A value breaks a rule. Messages like this one say which rule. Correct the value and save again.</td></tr>
+            <tr><td>Your account has no primary branch configured.</td><td>Your user has no branch, so you can't book shipments. Ask your administrator to add a branch to your user.</td></tr>
+            <tr><td>Scheduling conflict detected</td><td>The vehicle or driver is already on another trip at that time. Change the trip, or click Save anyway if you are sure.</td></tr>
+            <tr><td>Discard unsaved changes?</td><td>You are leaving a form you haven't saved. Click Stay on page to keep your work, or Discard changes to leave.</td></tr>
+            <tr><td>You don't have permission to do that.</td><td>Your role can't use this page or action. Ask your administrator if you need it.</td></tr>
+            <tr><td>Cannot reach the server.</td><td>TransitCore can't connect. Check your internet connection and try again. If it keeps happening, tell your administrator.</td></tr>
+            <tr><td>You are sent back to the sign-in page</td><td>Your session has ended. This happens after 8 hours in the current setup. Sign in again.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="plain">
+        <li>Date fields use the day-month-year format, <code>dd-mm-yyyy</code>.</li>
+        <li>Money is shown in rupees with Indian digit grouping, for example ₹1,61,070.</li>
+        <li>To sign out, click your name at the top right and choose <span class="f">Log out</span>, or click the arrow icon at the bottom of the left menu.</li>
+      </ul>
+
+      <footer class="guide-foot">
+        <p>Screens captured from the TransitCore test setup on 25 Sep 2026. The names, vehicles and amounts shown are demo data.</p>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<dialog class="zoom" id="zoom" aria-label="Enlarged screenshot">
+  <button type="button" class="zoom__close" aria-label="Close enlarged screenshot"><span class="mi" aria-hidden="true">close</span></button>
+  <img alt="">
+</dialog>
+
+<script>
+  (function () {
+    var toc = document.getElementById('toc-box');
+    if (toc && window.matchMedia('(max-width: 1023px)').matches) toc.removeAttribute('open');
+
+    var dialog = document.getElementById('zoom');
+    var big = dialog.querySelector('img');
+    function openZoom(img) {
+      big.src = img.currentSrc || img.src;
+      big.alt = img.alt;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+    }
+    document.querySelectorAll('figure.shot img').forEach(function (img) {
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.addEventListener('click', function () { openZoom(img); });
+      img.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(img); }
+      });
+    });
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog || e.target.closest('.zoom__close')) dialog.close();
+    });
+
+    if (!('IntersectionObserver' in window)) return;
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    var current = null;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var link = links[entry.target.id];
+        if (!link) return;
+        if (current) current.removeAttribute('aria-current');
+        link.setAttribute('aria-current', 'true');
+        current = link;
+      });
+    }, { rootMargin: '-15% 0px -75% 0px' });
+    document.querySelectorAll('main section[id], main article[id]').forEach(function (el) { observer.observe(el); });
+  })();
+</script>
